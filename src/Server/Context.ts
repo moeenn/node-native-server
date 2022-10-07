@@ -10,6 +10,11 @@ export class Context implements IContext {
     this.response = res
   }
 
+  /**
+   *  for POST/PUT requests, the body of the request can be parsed as object
+   *  this method parses the request body on-demand
+   * 
+  */
   public body(): Promise<unknown> {
     return new Promise((resolve) => {
       const chunks: Uint8Array[] = [];
@@ -24,6 +29,10 @@ export class Context implements IContext {
     })
   }
 
+  /**
+   *  helper for sending direct response to the http client as JSON
+   * 
+  */
   public json(data: unknown, status = 200) {
     respond(this.response, data, status)
   }

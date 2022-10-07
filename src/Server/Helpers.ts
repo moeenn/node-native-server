@@ -1,5 +1,9 @@
 import { Response } from "./index.types"
 
+/**
+ *  send a direct response to the http client
+ * 
+*/
 export function respond(res: Response, data: unknown, status: number) {
   res
     .setHeader("Content-Type", "application/json")
@@ -9,6 +13,10 @@ export function respond(res: Response, data: unknown, status: number) {
     )
 }
 
+/**
+ *  for POST/PUT requests, the request body is received as Uint8Array chunks
+ *  this method converts these chunks to JSON 
+*/
 export function uint8ArrayToJSON(chunks: Uint8Array[]): unknown {
   const data = Buffer.concat(chunks)
   return JSON.parse(data.toString())

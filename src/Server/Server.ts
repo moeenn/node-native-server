@@ -1,4 +1,4 @@
-import http from "http"
+import http from "node:http"
 import { IServer, ILogger, IServerOptions } from "./index.types"
 
 export class Server implements IServer {
@@ -13,6 +13,12 @@ export class Server implements IServer {
 		}
 	}
 
+	/**
+	 *  start execution of the server on the provided port
+	 *  promise is returned so tests can wait for the server bootup to 
+	 *  complete before performing the tests
+	 * 
+	*/
 	run(port: number): Promise<void> {
 		return new Promise((resolve) => {
 			this.instance.listen(port, "localhost", () => {

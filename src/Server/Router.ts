@@ -9,6 +9,10 @@ import { respond } from "./Helpers"
 export class Router implements IRouter {
   private routesMap: Map<string, RouteHandler>
 
+  /**
+   *  construct router will multiple route definitions
+   * 
+  */
   constructor(routes: IRouteOptions[]) {
     this.routesMap = new Map()
 
@@ -17,6 +21,10 @@ export class Router implements IRouter {
     }
   }
 
+  /**
+   *  register individual route
+   * 
+  */
   public route(method: HTTPMethod, url: string, handler: RouteHandler) {
     const routeKey = `${method} ${url}`
 
@@ -27,6 +35,12 @@ export class Router implements IRouter {
     this.routesMap.set(routeKey, handler)
   }
 
+  /**
+   *  node:http::createServer expects argument of type RequestListener
+   *  this function returns a function of type RequestListener so it can be 
+   *  registered directly with node:http::createServer
+   * 
+  */
   public hook(): RequestListener {
     const listener: RequestListener = (req: Request, res: Response) => {
       const { url, method } = req

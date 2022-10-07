@@ -1,4 +1,4 @@
-import { RequestListener, IncomingMessage, ServerResponse } from "http"
+import { RequestListener, IncomingMessage, ServerResponse } from "node:http"
 
 export {
   RequestListener,
