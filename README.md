@@ -1,11 +1,5 @@
 # node-native-server
-A Typescript sandbox with following tools already setup
-- Typescript compiler i.e. ```tsc```
-- Absolute imports with `module-alias`
-- ```eslint``` for static analysis and linting
-- ```vitest``` for testing
-- Some basic ```package.json``` scripts
-- Git pre-commit hooks with `husky`
+Implementation of a basic HTTP API server using the `node:http` module.
 
 ## Setup
 ```bash
@@ -24,12 +18,12 @@ $ npm run start
 ```
 *Note*: The `NODE_ENV` environment variable will be set to `production` when running the app in production mode.
 
-## Linting with ESLint
-```bash
-$ npm run lint
-```
-
-## Running Tests with Vitest
-```bash
-$ npm run test
-```
+### TODO
+- [ ] Parse query strings
+- [ ] Add error handling if invalid JSON is sent in request body
+- [ ] Add request body validation using zod
+- [ ] Implement parsing of bearer tokens
+- [ ] Implement storage (map) on Context object
+- [ ] Implement CORS (configuration through server constructor)
+- [ ] Implement token validation
+- [ ] Handle situation where request `Content-Type` of not `application/json`
