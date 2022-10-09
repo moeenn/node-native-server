@@ -1,16 +1,19 @@
+import EventEmitter from "node:events"
 import { RouteHandler, IRouter, IRouteOptions, HTTPMethod } from "./index.types"
 import { Context } from "./Context"
 import { respond } from "./Helpers"
 
 export class Router implements IRouter {
-  private routesMap: Map<string, RouteHandler>
+  private routesSet: Set<string>
+  private emitter: EventEmitter
 
   /**
    *  construct router will multiple route definitions
    * 
   */
   constructor(routes: IRouteOptions[]) {
-    this.routesMap = new Map()
+    this.routesSet = new Set()
+    this.emitter = new EventEmitter()
 
     for (const route of routes) {
       this.route(route.method, route.url, route.handler)
@@ -24,11 +27,13 @@ export class Router implements IRouter {
   public route(method: HTTPMethod, url: string, handler: RouteHandler) {
     const routeKey = `${method} ${url}`
 
-    if (this.routesMap.has(routeKey)) {
+    if (this.routesSet.has(routeKey)) {
       throw new Error(`route already registered: ${routeKey}`)
     }
 
-    this.routesMap.set(routeKey, handler)
+    /** @TODO: wrap the handler to do error handling */
+    this.emitter.addListener(routeKey, handler)
+    this.routesSet.add(routeKey)
   }
 
   /**
@@ -44,15 +49,12 @@ export class Router implements IRouter {
       return respond(ctx, { message: "no url provided" }, 404)
     }
 
-    const handler = this.routesMap.get(`${method} ${url}`)
-    if (!handler) {
+    const exits = this.routesSet.has(`${method} ${url}`)
+    if (!exits) {
       return respond(ctx, { message: "not found" }, 404)
     }
 
-    try {
-      handler(ctx)
-    } catch (err) {
-      return respond(ctx, { error: (err as Error).message }, 500)
-    }
+    const routeKey = `${method} ${url}`
+    this.emitter.emit(routeKey, ctx)
   }
 }

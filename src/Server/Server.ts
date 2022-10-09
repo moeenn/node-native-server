@@ -24,6 +24,11 @@ export class Server implements IServer {
 	private listener(req: Request, res: Response) {
 		const ctx = new Context(req, res)
 		this.router.resolve(ctx)
+
+		/** @TODO: perform after request is completed */
+		if (this.logger) {
+			this.logger.log(`${req.method} - ${req.url}`)
+		} 
 	}
 
 	/**

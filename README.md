@@ -27,3 +27,6 @@ $ npm run start
 - [ ] Implement CORS (configuration through server constructor)
 - [ ] Implement token validation
 - [ ] Handle situation where request `Content-Type` of not `application/json`
+- [ ] Prevent server crash on post requests if body is not provided
+- [ ] In router class, wrap the route handler to perform error handling
+- [ ] Log request details after a request has been completed
