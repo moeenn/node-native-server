@@ -1,11 +1,11 @@
-import { Response } from "./index.types"
+import { IContext } from "./index.types"
 
 /**
  *  send a direct response to the http client
  * 
 */
-export function respond(res: Response, data: unknown, status: number) {
-  res
+export function respond(ctx: IContext, data: unknown, status: number) {
+  ctx.response
     .setHeader("Content-Type", "application/json")
     .writeHead(status)
     .end(

@@ -34,6 +34,6 @@ export class Context implements IContext {
    * 
   */
   public json(data: unknown, status = 200) {
-    respond(this.response, data, status)
+    respond(this, data, status)
   }
 }

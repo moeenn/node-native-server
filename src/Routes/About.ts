@@ -1,6 +1,6 @@
 import { RouteHandler } from "@/Server"
 
-export const About: RouteHandler = (ctx) => {
+export const About: RouteHandler = async (ctx) => {
   return ctx.json(
     {
       message: "this is about"

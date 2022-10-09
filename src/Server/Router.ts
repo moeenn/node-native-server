@@ -1,8 +1,4 @@
-import {
-  RequestListener, RouteHandler, Request,
-  Response, IRouter, IRouteOptions, HTTPMethod
-} from "./index.types"
-
+import { RouteHandler, IRouter, IRouteOptions, HTTPMethod } from "./index.types"
 import { Context } from "./Context"
 import { respond } from "./Helpers"
 
@@ -36,32 +32,27 @@ export class Router implements IRouter {
   }
 
   /**
-   *  node:http::createServer expects argument of type RequestListener
-   *  this function returns a function of type RequestListener so it can be 
-   *  registered directly with node:http::createServer
+   *  the server class will pass the context instance to this method
+   *  then it will be up to the router to pass the request along to correct 
+   *  request handler
    * 
   */
-  public hook(): RequestListener {
-    const listener: RequestListener = (req: Request, res: Response) => {
-      const { url, method } = req
+  public resolve(ctx: Context) {
+    const { url, method } = ctx.request
 
-      if (!url) {
-        return respond(res, { message: "no url provided" }, 404)
-      }
-
-      const handler = this.routesMap.get(`${method} ${url}`)
-      if (!handler) {
-        return respond(res, { message: "not found" }, 404)
-      }
-
-      try {
-        const ctx = new Context(req, res)
-        handler(ctx)
-      } catch (err) {
-        return respond(res, { error: (err as Error).message }, 500)
-      }
+    if (!url) {
+      return respond(ctx, { message: "no url provided" }, 404)
     }
 
-    return listener
+    const handler = this.routesMap.get(`${method} ${url}`)
+    if (!handler) {
+      return respond(ctx, { message: "not found" }, 404)
+    }
+
+    try {
+      handler(ctx)
+    } catch (err) {
+      return respond(ctx, { error: (err as Error).message }, 500)
+    }
   }
 }

@@ -1,16 +1,29 @@
 import http from "node:http"
-import { IServer, ILogger, IServerOptions } from "./index.types"
+import { Context } from "./Context"
+import { IServer, ILogger, IServerOptions, IRouter, Request, Response } from "./index.types"
 
 export class Server implements IServer {
 	private instance: http.Server
+	private router: IRouter
 	private logger?: ILogger
 
 	constructor(options: IServerOptions) {
-		this.instance = http.createServer(options.router)
+		this.instance = http.createServer(this.listener.bind(this))
+		this.router = options.router
 
 		if (options.logger) {
 			this.logger = options.logger
 		}
+	}
+
+	/**
+	 *  all incoming requests will be routed through this function
+	 *  the server will generate the context intance and pass it along to the 
+	 *  router
+	*/
+	private listener(req: Request, res: Response) {
+		const ctx = new Context(req, res)
+		this.router.resolve(ctx)
 	}
 
 	/**

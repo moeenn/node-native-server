@@ -4,12 +4,9 @@ import { routes } from "./Routes"
 
 async function main() {
 	const router = new Router(routes)
+	const logger = new Logger()
 
-	const server = new Server({
-		router: router.hook(),
-		logger: new Logger(),
-	})
-
+	const server = new Server({ router, logger })
 	await server.run(3000)
 }
 

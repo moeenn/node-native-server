@@ -11,7 +11,7 @@ export interface ILogger {
 }
 
 export interface IServerOptions {
-  router: RequestListener,
+  router: IRouter,
   logger?: ILogger,
 }
 
@@ -23,7 +23,7 @@ export type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE"
 
 export interface IRouter {
   route: (method: HTTPMethod, url: string, handler: RouteHandler) => void,
-  hook: (req: Request, res: Response) => void
+  resolve: (ctx: IContext) => void
 }
 
 export interface IRouteOptions {
@@ -39,4 +39,4 @@ export interface IContext {
   json: (data: unknown, status?: number) => void,
 }
 
-export type RouteHandler = (ctx: IContext) => void
+export type RouteHandler = (ctx: IContext) => Promise<void>
