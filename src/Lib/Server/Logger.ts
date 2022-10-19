@@ -22,7 +22,7 @@ export class Logger implements ILogger {
    *  promise is returned so the logging can be offloaded to the event-loop
    *
    */
-  public log(message: string, details: unknown = undefined): Promise<void> {
+  public log(message: string, details?: Record<string, unknown>): Promise<void> {
     return new Promise((resolve) => {
       const { time, timestamp } = this.getTime()
 
@@ -30,7 +30,7 @@ export class Logger implements ILogger {
         timestamp,
         time,
         message,
-        details: details,
+        ...(details && details),
       }
 
       const stringified = JSON.stringify(entry) + ","

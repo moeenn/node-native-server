@@ -19,3 +19,15 @@ export function uint8ArrayToJSON(chunks: Uint8Array[]): unknown {
   const data = Buffer.concat(chunks)
   return JSON.parse(data.toString())
 }
+
+/**
+ *  check if a string is a valid JSON or not
+ * 
+*/
+export function isJSON(str: string): boolean {
+  try {
+      return (JSON.parse(str) && !!str)
+  } catch (e) {
+      return false
+  }
+}

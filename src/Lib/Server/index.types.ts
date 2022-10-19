@@ -7,7 +7,7 @@ export {
 }
 
 export interface ILogger {
-  log: (message: string, details?: unknown) => void
+  log: (message: string, details?: Record<string, unknown>) => void
 }
 
 export interface IServer {

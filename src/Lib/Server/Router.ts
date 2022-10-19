@@ -2,7 +2,7 @@ import EventEmitter from "node:events"
 import { RouteHandler, IRouter, HTTPMethod, IContext } from "./index.types"
 import { RoutesDefinition } from "@/Routes"
 import { Context } from "./Context"
-import { respond } from "./Helpers"
+import { respond, isJSON } from "./Helpers"
 import { Exception } from "@/Lib/Exceptions"
 import { Service } from "typedi"
 
@@ -48,6 +48,7 @@ export class Router implements IRouter {
       try {
         await handler(ctx)
       } catch (err) {
+
         if (err instanceof Exception) {
           return ctx.json(
             {
@@ -64,7 +65,9 @@ export class Router implements IRouter {
           return ctx.json(
             {
               status,
-              message: err.message,
+              message: isJSON(err.message)
+                ? JSON.parse(err.message)
+                : err.message,
             },
             status,
           )

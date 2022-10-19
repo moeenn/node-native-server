@@ -9,7 +9,7 @@
     "test": "npx vitest",
     "lint": "npx eslint . --ext .ts",
     "format": "npx prettier --write 'src/**/*.ts'",
-    "check": "npm run format && npm run lint",    
+    "check": "npm run format && npm run lint",
     "prepare": "husky install"
   },
   "_moduleAliases": {
@@ -29,6 +29,7 @@
   "dependencies": {
     "module-alias": "^2.2.2",
     "reflect-metadata": "^0.1.13",
-    "typedi": "^0.10.0"
+    "typedi": "^0.10.0",
+    "zod": "^3.19.1"
   }
 }

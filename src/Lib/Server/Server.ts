@@ -23,7 +23,10 @@ export class Server implements IServer {
     this.router.resolve(ctx)
 
     /** @TODO: perform after request is completed */
-    this.logger.log(`${req.method} - ${req.url}`)
+    this.logger.log("incoming request", {
+      method: req.method,
+      url: req.url
+    })
   }
 
   /**
@@ -35,7 +38,7 @@ export class Server implements IServer {
   run(port: number): Promise<void> {
     return new Promise((resolve) => {
       this.instance.listen(port, "0.0.0.0", () => {
-        this.logger.log(`Starting server on port :${port}`)
+        this.logger.log("server startup", { port })
         resolve()
       })
     })
