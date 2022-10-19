@@ -1,17 +1,20 @@
 import EventEmitter from "node:events"
-import { RouteHandler, IRouter, HTTPMethod } from "./index.types"
-import { RoutesDefinition } from "./RoutesDefinition"
+import { RouteHandler, IRouter, HTTPMethod, IContext } from "./index.types"
+import { RoutesDefinition } from "@/Routes"
 import { Context } from "./Context"
 import { respond } from "./Helpers"
+import { Exception } from "@/Lib/Exceptions"
+import { Service } from "typedi"
 
+@Service()
 export class Router implements IRouter {
   private routesSet: Set<string>
   private emitter: EventEmitter
 
   /**
    *  construct router will multiple route definitions
-   * 
-  */
+   *
+   */
   constructor(routesDefinition: RoutesDefinition) {
     this.routesSet = new Set()
     this.emitter = new EventEmitter()
@@ -23,8 +26,8 @@ export class Router implements IRouter {
 
   /**
    *  register individual route
-   * 
-  */
+   *
+   */
   public route(method: HTTPMethod, url: string, handler: RouteHandler) {
     const routeKey = `${method} ${url}`
 
@@ -32,17 +35,52 @@ export class Router implements IRouter {
       throw new Error(`route already registered: ${routeKey}`)
     }
 
-    /** @TODO: wrap the handler to do error handling */
-    this.emitter.addListener(routeKey, handler)
+    this.emitter.addListener(routeKey, this.decorateRouteHandler(handler))
     this.routesSet.add(routeKey)
   }
 
   /**
+   *  wrap route handler to perform error handling
+   *
+   */
+  private decorateRouteHandler(handler: RouteHandler): RouteHandler {
+    return async (ctx: IContext) => {
+      try {
+        await handler(ctx)
+      } catch (err) {
+        if (err instanceof Exception) {
+          return ctx.json(
+            {
+              status: err.status,
+              message: err.message,
+              details: err.details,
+            },
+            err.status,
+          )
+        }
+
+        if (err instanceof Error) {
+          const status = 500
+          return ctx.json(
+            {
+              status,
+              message: err.message,
+            },
+            status,
+          )
+        }
+
+        return ctx.json({ error: err }, 500)
+      }
+    }
+  }
+
+  /**
    *  the server class will pass the context instance to this method
-   *  then it will be up to the router to pass the request along to correct 
+   *  then it will be up to the router to pass the request along to correct
    *  request handler
-   * 
-  */
+   *
+   */
   public resolve(ctx: Context) {
     const { url, method } = ctx.request
 

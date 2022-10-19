@@ -17,14 +17,14 @@ export interface IServer {
 export type HTTPMethod = "GET" | "POST" | "PUT" | "DELETE"
 
 export interface IRouter {
-  route: (method: HTTPMethod, url: string, handler: RouteHandler) => void,
+  route: (method: HTTPMethod, url: string, handler: RouteHandler) => void
   resolve: (ctx: IContext) => void
 }
 
 export interface IRouteOptions {
-  method: HTTPMethod,
-  url: string,
-  handler: RouteHandler,
+  method: HTTPMethod
+  url: string
+  handler: RouteHandler
 }
 
 export interface IRoutesDefinition {
@@ -32,10 +32,10 @@ export interface IRoutesDefinition {
 }
 
 export interface IContext {
-  request: IncomingMessage,
-  response: ServerResponse,
-  body: () => Promise<unknown>,
-  json: (data: unknown, status?: number) => void,
+  request: IncomingMessage
+  response: ServerResponse
+  body: () => Promise<unknown>
+  json: (data: unknown, status?: number) => void
 }
 
 export type RouteHandler = (ctx: IContext) => Promise<void>

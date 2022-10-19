@@ -1,1 +1,1 @@
-export { container, singleton } from "tsyringe"
+export { Container, Service } from "typedi"

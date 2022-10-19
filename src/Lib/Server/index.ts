@@ -3,7 +3,14 @@ export { Router } from "./Router"
 export { Logger } from "./Logger"
 
 export {
-  IServer, Request, Response, HTTPMethod,
-  RouteHandler, IRouter, IRouteOptions, ILogger,
-  IContext, IRoutesDefinition
+  IServer,
+  Request,
+  Response,
+  HTTPMethod,
+  RouteHandler,
+  IRouter,
+  IRouteOptions,
+  ILogger,
+  IContext,
+  IRoutesDefinition,
 } from "./index.types"

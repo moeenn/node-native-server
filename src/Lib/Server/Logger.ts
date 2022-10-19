@@ -1,33 +1,41 @@
 import { ILogger } from "./index.types"
+import { Service } from "typedi"
 
+@Service()
 export class Logger implements ILogger {
   private stream = console.log
 
   /**
-   *  format the log entry time in this format 
-   * 
-  */
-  private getTime(): string {
+   *  format the log entry time in this format
+   *
+   */
+  private getTime() {
     const time = new Date()
-    return `${time.toLocaleDateString()} ${time.toLocaleTimeString()}`
+    return {
+      timestamp: time.getTime(),
+      time: `${time.toLocaleDateString()} ${time.toLocaleTimeString()}`,
+    }
   }
 
   /**
    *  log messages to the stdout
    *  promise is returned so the logging can be offloaded to the event-loop
-   * 
-  */
+   *
+   */
   public log(message: string, details: unknown = undefined): Promise<void> {
-    return new Promise(resolve => {
-      const time = this.getTime()
-      const output = `${time} - ${message}`
+    return new Promise((resolve) => {
+      const { time, timestamp } = this.getTime()
 
-      if (details) {
-        this.stream(output, details)
-        return
+      const entry = {
+        timestamp,
+        time,
+        message,
+        details: details,
       }
 
-      this.stream(output)
+      const stringified = JSON.stringify(entry) + ","
+      this.stream(stringified)
+
       resolve()
     })
   }
