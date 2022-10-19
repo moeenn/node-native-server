@@ -36,6 +36,8 @@ export interface IContext {
   response: ServerResponse
   body: () => Promise<unknown>
   json: (data: unknown, status?: number) => void
+  setValue: (key: string, value: unknown) => void
+  getValue: (key: string) => unknown
 }
 
 export type RouteHandler = (ctx: IContext) => Promise<void>

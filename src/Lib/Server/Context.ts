@@ -4,10 +4,12 @@ import { respond, uint8ArrayToJSON } from "./Helpers"
 export class Context implements IContext {
   public request: Request
   public response: Response
+  private store: Map<string, unknown>
 
   constructor(req: Request, res: Response) {
     this.request = req
     this.response = res
+    this.store = new Map()
   }
 
   /**
@@ -39,5 +41,26 @@ export class Context implements IContext {
    */
   public json(data: unknown, status = 200) {
     respond(this, data, status)
+  }
+
+  /**
+   *  store a value on the current request 
+   * 
+  */
+  public setValue(key: string, value: unknown) {
+    this.store.set(key, value)
+  }
+
+  /**
+   *  retreive a value from the request storage
+   * 
+  */
+  public getValue(key: string): unknown {
+    const value = this.store.get(key)
+    if (!value) {
+      throw new Error(`'${key}' not set on the context`)
+    }
+
+    return value
   }
 }
