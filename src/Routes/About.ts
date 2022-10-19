@@ -1,4 +1,4 @@
-import { RouteHandler } from "@/Server"
+import { RouteHandler } from "@/Lib/Server"
 
 export const About: RouteHandler = async (ctx) => {
   return ctx.json(

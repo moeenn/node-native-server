@@ -1,19 +1,20 @@
 import http from "node:http"
 import { Context } from "./Context"
-import { IServer, ILogger, IServerOptions, IRouter, Request, Response } from "./index.types"
+import { IServer, Request, Response } from "./index.types"
+import { Router, Logger } from "."
 
 export class Server implements IServer {
 	private instance: http.Server
-	private router: IRouter
-	private logger?: ILogger
+	// private router: Router
+	// private logger: Logger
 
-	constructor(options: IServerOptions) {
+	constructor(
+		private router: Router,
+		private logger: Logger
+	) {
 		this.instance = http.createServer(this.listener.bind(this))
-		this.router = options.router
-
-		if (options.logger) {
-			this.logger = options.logger
-		}
+		// this.router = router
+		// this.logger = logger
 	}
 
 	/**
@@ -26,9 +27,7 @@ export class Server implements IServer {
 		this.router.resolve(ctx)
 
 		/** @TODO: perform after request is completed */
-		if (this.logger) {
-			this.logger.log(`${req.method} - ${req.url}`)
-		} 
+		this.logger.log(`${req.method} - ${req.url}`)
 	}
 
 	/**
@@ -39,11 +38,8 @@ export class Server implements IServer {
 	*/
 	run(port: number): Promise<void> {
 		return new Promise((resolve) => {
-			this.instance.listen(port, "localhost", () => {
-				if (this.logger) {
-					this.logger.log(`Starting server on port :${port}`)
-				}
-
+			this.instance.listen(port, "0.0.0.0", () => {
+				this.logger.log(`Starting server on port :${port}`)
 				resolve()
 			})
 		})

@@ -5,5 +5,5 @@ export { Logger } from "./Logger"
 export {
   IServer, Request, Response, HTTPMethod,
   RouteHandler, IRouter, IRouteOptions, ILogger,
-  IContext
+  IContext, IRoutesDefinition
 } from "./index.types"

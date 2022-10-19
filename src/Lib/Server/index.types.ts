@@ -10,11 +10,6 @@ export interface ILogger {
   log: (message: string, details?: unknown) => void
 }
 
-export interface IServerOptions {
-  router: IRouter,
-  logger?: ILogger,
-}
-
 export interface IServer {
   run: (port: number) => void
 }
@@ -30,6 +25,10 @@ export interface IRouteOptions {
   method: HTTPMethod,
   url: string,
   handler: RouteHandler,
+}
+
+export interface IRoutesDefinition {
+  routes: IRouteOptions[]
 }
 
 export interface IContext {

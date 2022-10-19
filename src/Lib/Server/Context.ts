@@ -16,15 +16,19 @@ export class Context implements IContext {
    * 
   */
   public body(): Promise<unknown> {
-    return new Promise((resolve) => {
+    return new Promise((resolve, reject) => {
       const chunks: Uint8Array[] = [];
       this.request.on("data", (chunk) => {
         chunks.push(chunk);
       })
 
       this.request.on("end", () => {
-        const data = uint8ArrayToJSON(chunks)
-        resolve(data)
+        try {
+          const data = uint8ArrayToJSON(chunks)
+          resolve(data)
+        } catch (err) {
+          reject(err)
+        }
       })
     })
   }
