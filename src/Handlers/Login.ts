@@ -1,4 +1,4 @@
-import { RouteHandler } from "@/Lib/Router"
+import { IRouteOptions } from "@/Lib/Router"
 import { z } from "zod"
 
 const schema = z.object({
@@ -6,10 +6,13 @@ const schema = z.object({
   password: z.string().min(8),
 })
 
-export const Login: RouteHandler = async (ctx) => {
-  const body = schema.parse(await ctx.body())
+export const Login: IRouteOptions = {
+  handler: async (ctx) => {
+    const body = schema.parse(await ctx.body())
 
-  return ctx.json({
-    body,
-  })
+    return ctx.json({
+      body,
+    })
+  }
+
 }

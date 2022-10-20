@@ -1,4 +1,4 @@
-import { IRouteOptions, IRoutesDefinition } from "@/Lib/Router"
+import { IRoutesDefinition, IRoute } from "@/Lib/Router"
 import { Service } from "@/Lib/DI"
 
 import { Home } from "@/Handlers/Home"
@@ -11,9 +11,9 @@ import { Login } from "@/Handlers/Login"
  */
 @Service()
 export class RoutesDefinition implements IRoutesDefinition {
-  public readonly routes: IRouteOptions[] = [
-    { url: "/", method: "GET", handler: Home },
-    { url: "/about", method: "GET", handler: About },
-    { url: "/login", method: "POST", handler: Login },
+  public readonly routes: IRoute[] = [
+    { url: "/", method: "GET", options: Home },
+    { url: "/about", method: "GET", options: About },
+    { url: "/login", method: "POST", options: Login },
   ]
 }

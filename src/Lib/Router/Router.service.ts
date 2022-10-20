@@ -20,7 +20,7 @@ export class Router implements IRouter {
     this.emitter = new EventEmitter()
 
     for (const route of routesDefinition.routes) {
-      this.route(route.method, route.url, route.handler)
+      this.route(route.method, route.url, route.options.handler)
     }
   }
 

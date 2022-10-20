@@ -1,9 +1,11 @@
-import { RouteHandler } from "@/Lib/Router"
+import { IRouteOptions } from "@/Lib/Router"
 
-export const Home: RouteHandler = async (ctx) => {
-  throw new Error("sample error message")
+export const Home: IRouteOptions = {
+  handler: async (ctx) => {
+    throw new Error("sample error message")
 
-  return ctx.json({
-    message: "this is home",
-  })
+    return ctx.json({
+      message: "this is home",
+    })
+  }
 }

@@ -9,12 +9,17 @@ export interface IRouter {
 
 export type RouteHandler = (ctx: IContext) => Promise<void>
 
+// TODO: add preHandler
 export interface IRouteOptions {
-  method: HTTPMethod
-  url: string
   handler: RouteHandler
 }
 
+export interface IRoute {
+  method: HTTPMethod
+  url: string
+  options: IRouteOptions
+}
+
 export interface IRoutesDefinition {
-  routes: IRouteOptions[]
+  routes: IRoute[]
 }

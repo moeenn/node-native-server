@@ -1,10 +1,12 @@
-import { RouteHandler } from "@/Lib/Router"
+import { IRouteOptions } from "@/Lib/Router"
 
-export const About: RouteHandler = async (ctx) => {
-  const token = ctx.getValue("token")
+export const About: IRouteOptions = {
+  handler: async (ctx) => {
+    const token = ctx.getValue("token")
 
-  return ctx.json({
-    message: "this is about",
-    token,
-  })
+    return ctx.json({
+      message: "this is about",
+      token,
+    })
+  }
 }

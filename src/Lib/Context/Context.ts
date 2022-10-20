@@ -80,12 +80,7 @@ export class Context implements IContext {
    *  retreive a value from the request storage
    * 
   */
-  public getValue(key: string): unknown {
-    const value = this._store.get(key)
-    if (!value) {
-      throw new Error(`'${key}' not set on the context`)
-    }
-
-    return value
+  public getValue(key: string): unknown | undefined {
+    return this._store.get(key)
   }
 }
