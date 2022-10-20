@@ -1,15 +1,24 @@
-import { Request, Response, IContext } from "./index.types"
-import { respond, uint8ArrayToJSON } from "./Helpers"
+import { IncomingMessage, ServerResponse, IContext } from "./index.types"
+import { Helpers } from "@/Lib/Server"
 
 export class Context implements IContext {
-  public request: Request
-  public response: Response
-  private store: Map<string, unknown>
+  public request: IncomingMessage
+  public response: ServerResponse
+  private _store: Map<string, unknown>
 
-  constructor(req: Request, res: Response) {
+  constructor(req: IncomingMessage, res: ServerResponse) {
     this.request = req
     this.response = res
-    this.store = new Map()
+    this._store = new Map()
+  }
+
+  /**
+   *  for POST/PUT requests, the request body is received as Uint8Array chunks
+   *  this method converts these chunks to JSON
+   */
+  private _uint8ArrayToJSON(chunks: Uint8Array[]): unknown {
+    const data = Buffer.concat(chunks)
+    return JSON.parse(data.toString())
   }
 
   /**
@@ -26,7 +35,7 @@ export class Context implements IContext {
 
       this.request.on("end", () => {
         try {
-          const data = uint8ArrayToJSON(chunks)
+          const data = this._uint8ArrayToJSON(chunks)
           resolve(data)
         } catch (err) {
           reject(err)
@@ -40,7 +49,7 @@ export class Context implements IContext {
    *
    */
   public json(data: unknown, status = 200) {
-    respond(this, data, status)
+    Helpers.respond(this, data, status)
   }
 
   /**
@@ -48,7 +57,7 @@ export class Context implements IContext {
    * 
   */
   public setValue(key: string, value: unknown) {
-    this.store.set(key, value)
+    this._store.set(key, value)
   }
 
   /**
@@ -56,7 +65,7 @@ export class Context implements IContext {
    * 
   */
   public getValue(key: string): unknown {
-    const value = this.store.get(key)
+    const value = this._store.get(key)
     if (!value) {
       throw new Error(`'${key}' not set on the context`)
     }

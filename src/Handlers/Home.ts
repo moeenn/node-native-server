@@ -1,4 +1,4 @@
-import { RouteHandler } from "@/Lib/Server"
+import { RouteHandler } from "@/Lib/Router"
 
 export const Home: RouteHandler = async (ctx) => {
   throw new Error("sample error message")

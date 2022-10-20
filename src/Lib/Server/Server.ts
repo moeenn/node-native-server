@@ -1,8 +1,8 @@
 import http from "node:http"
-import { Context } from "./Context"
+import { Context } from "@/Lib/Context"
 import { IServer, Request, Response } from "./index.types"
-import { Router } from "./Router"
-import { Logger } from "./Logger"
+import { Router } from "@/Lib/Router"
+import { Logger } from "@/Lib/Logger"
 import { Service } from "typedi"
 
 @Service()

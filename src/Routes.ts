@@ -1,9 +1,9 @@
-import { IRouteOptions, IRoutesDefinition } from "@/Lib/Server"
+import { IRouteOptions, IRoutesDefinition } from "@/Lib/Router"
 import { Service } from "@/Lib/DI"
 
-import { Home } from "./Home"
-import { About } from "./About"
-import { Login } from "./Login"
+import { Home } from "@/Handlers/Home"
+import { About } from "@/Handlers/About"
+import { Login } from "@/Handlers/Login"
 
 /**
  *  register all routes here

@@ -1,8 +1,8 @@
 import EventEmitter from "node:events"
-import { RouteHandler, IRouter, HTTPMethod, IContext } from "./index.types"
+import { RouteHandler, IRouter, HTTPMethod } from "./index.types"
 import { RoutesDefinition } from "@/Routes"
-import { Context } from "./Context"
-import { respond, isJSON } from "./Helpers"
+import { IContext } from "@/Lib/Context"
+import { Helpers } from "@/Lib/Server"
 import { Exception } from "@/Lib/Exceptions"
 import { Service } from "typedi"
 
@@ -65,7 +65,7 @@ export class Router implements IRouter {
           return ctx.json(
             {
               status,
-              message: isJSON(err.message)
+              message: Helpers.isJSON(err.message)
                 ? JSON.parse(err.message)
                 : err.message,
             },
@@ -84,16 +84,16 @@ export class Router implements IRouter {
    *  request handler
    *
    */
-  public resolve(ctx: Context) {
+  public resolve(ctx: IContext) {
     const { url, method } = ctx.request
 
     if (!url) {
-      return respond(ctx, { message: "no url provided" }, 404)
+      return Helpers.respond(ctx, { message: "no url provided" }, 404)
     }
 
     const exits = this.routesSet.has(`${method} ${url}`)
     if (!exits) {
-      return respond(ctx, { message: "not found" }, 404)
+      return Helpers.respond(ctx, { message: "not found" }, 404)
     }
 
     const routeKey = `${method} ${url}`

@@ -1,4 +1,4 @@
-import { RouteHandler } from "@/Lib/Server"
+import { RouteHandler } from "@/Lib/Router"
 import { z } from "zod"
 
 const schema = z.object({
