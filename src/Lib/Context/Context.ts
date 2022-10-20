@@ -10,6 +10,8 @@ export class Context implements IContext {
     this.request = req
     this.response = res
     this._store = new Map()
+
+    this._parseBearerToken()
   }
 
   /**
@@ -19,6 +21,20 @@ export class Context implements IContext {
   private _uint8ArrayToJSON(chunks: Uint8Array[]): unknown {
     const data = Buffer.concat(chunks)
     return JSON.parse(data.toString())
+  }
+
+  /**
+   *  read and store the auth Bearer token, if present
+   * 
+  */
+  private _parseBearerToken() {
+    const header = this.request.headers.authorization
+    if (!header) return
+
+    const [_, token] = header.split(" ")
+    if (!token) return
+
+    this.setValue("token", token)
   }
 
   /**

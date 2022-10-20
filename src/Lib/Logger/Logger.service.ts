@@ -11,10 +11,7 @@ export class Logger implements ILogger {
    */
   private getTime() {
     const time = new Date()
-    return {
-      timestamp: time.getTime(),
-      time: `${time.toLocaleDateString()} ${time.toLocaleTimeString()}`,
-    }
+    return time.getTime()
   }
 
   /**
@@ -24,16 +21,14 @@ export class Logger implements ILogger {
    */
   public log(message: string, details?: Record<string, unknown>): Promise<void> {
     return new Promise((resolve) => {
-      const { time, timestamp } = this.getTime()
 
       const entry = {
-        timestamp,
-        time,
+        time: this.getTime(),
         message,
         ...(details && details),
       }
 
-      const stringified = JSON.stringify(entry) + ","
+      const stringified = JSON.stringify(entry)
       this.stream(stringified)
 
       resolve()
