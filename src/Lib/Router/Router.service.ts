@@ -1,6 +1,6 @@
 import EventEmitter from "node:events"
 import { RouteHandler, IRouter, HTTPMethod } from "./index.types"
-import { RoutesDefinition } from "@/Routes"
+import { RoutesRegistry } from "@/Routes"
 import { IContext } from "@/Lib/Context"
 import { Helpers } from "@/Lib/Server"
 import { Exception } from "@/Lib/Exceptions"
@@ -15,11 +15,11 @@ export class Router implements IRouter {
    *  construct router will multiple route definitions
    *
    */
-  constructor(routesDefinition: RoutesDefinition) {
+  constructor(routesRegistry: RoutesRegistry) {
     this.routesSet = new Set()
     this.emitter = new EventEmitter()
 
-    for (const route of routesDefinition.routes) {
+    for (const route of routesRegistry.routes) {
       this.route(route.method, route.url, route.options.handler)
     }
   }

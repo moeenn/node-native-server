@@ -20,6 +20,6 @@ export interface IRoute {
   options: IRouteOptions
 }
 
-export interface IRoutesDefinition {
+export interface IRoutesRegistry {
   routes: IRoute[]
 }
